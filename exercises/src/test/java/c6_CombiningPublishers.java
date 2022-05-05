@@ -184,7 +184,7 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
                     if (first.get().metaData.contains("spam"))
                         return mailBoxSecondary();
                     else
-                        return mailBoxPrimary();
+                        return flux;
                 }
         );
         mailBoxPrimary();
