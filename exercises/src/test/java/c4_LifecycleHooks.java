@@ -37,7 +37,9 @@ public class c4_LifecycleHooks extends LifecycleHooksBase {
         CopyOnWriteArrayList<String> hooksTriggered = new CopyOnWriteArrayList<>();
 
         Flux<Integer> temperatureFlux = room_temperature_service()
-                //todo: change this line only
+                .doOnSubscribe(
+                        i -> {hooksTriggered.add("subscribe");}
+                )
                 ;
 
         StepVerifier.create(temperatureFlux.take(5))
@@ -56,7 +58,7 @@ public class c4_LifecycleHooks extends LifecycleHooksBase {
         CopyOnWriteArrayList<String> hooksTriggered = new CopyOnWriteArrayList<>();
 
         Flux<Integer> temperatureFlux = room_temperature_service()
-                //todo: change this line only
+                .doFirst(() -> {hooksTriggered.add("before subscribe");})
                 ;
 
         StepVerifier.create(temperatureFlux.take(5).doOnSubscribe(s -> hooksTriggered.add("subscribe")))
@@ -75,7 +77,12 @@ public class c4_LifecycleHooks extends LifecycleHooksBase {
         AtomicInteger counter = new AtomicInteger(0);
 
         Flux<Integer> temperatureFlux = room_temperature_service()
-                //todo: change this line only
+                .doOnNext(
+                        i -> {
+                            System.out.println('i');
+                            counter.incrementAndGet();
+                        }
+                )
                 ;
 
         StepVerifier.create(temperatureFlux)
@@ -94,7 +101,11 @@ public class c4_LifecycleHooks extends LifecycleHooksBase {
         AtomicBoolean completed = new AtomicBoolean(false);
 
         Flux<Integer> temperatureFlux = room_temperature_service()
-                //todo: change this line only
+                .doOnComplete(
+                        () -> {
+                            completed.set(true);
+                        }
+                )
                 ;
 
         StepVerifier.create(temperatureFlux.skip(20))
@@ -113,7 +124,11 @@ public class c4_LifecycleHooks extends LifecycleHooksBase {
         AtomicBoolean canceled = new AtomicBoolean(false);
 
         Flux<Integer> temperatureFlux = room_temperature_service()
-                //todo: change this line only
+                .doOnDiscard(
+                        () -> {
+                            canceled.set(true);
+                        }
+                )
                 ;
 
         StepVerifier.create(temperatureFlux.take(0))
