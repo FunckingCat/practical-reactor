@@ -236,7 +236,7 @@ public class c4_LifecycleHooks extends LifecycleHooksBase {
         CopyOnWriteArrayList<String> signals = new CopyOnWriteArrayList<>();
 
         Flux<Integer> flux = Flux.just(1, 2, 3)
-                //todo: change this line only
+                .doOnEach(signal -> signals.add(signal.getType().name()))
                 ;
 
         StepVerifier.create(flux)
