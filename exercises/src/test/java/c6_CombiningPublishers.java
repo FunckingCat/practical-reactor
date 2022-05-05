@@ -160,7 +160,7 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     @Test
     public void plan_b() {
         //todo: feel free to change code as you need
-        Flux<String> stonks = null;
+        Flux<String> stonks = getStocksLocalCache().switchIfEmpty(getStocksRest());
         getStocksLocalCache();
         getStocksRest();
 
@@ -179,7 +179,7 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     @Test
     public void mail_box_switcher() {
         //todo: feel free to change code as you need
-        Flux<Message> myMail = null;
+        Flux<Message> myMail = mailBoxPrimary();
         mailBoxPrimary();
         mailBoxSecondary();
 
