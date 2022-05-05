@@ -77,7 +77,7 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     public void streaming_service() {
         //todo: feel free to change code as you need
         Flux<Message> messageFlux =
-        streamingService().flatMap(i -> i);
+        streamingService().flatMapMany(i -> i);
 
         //don't change below this line
         StepVerifier.create(messageFlux)
@@ -95,7 +95,7 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     @Test
     public void i_am_rubber_you_are_glue() {
         //todo: feel free to change code as you need
-        Flux<Integer> numbers = null;
+        Flux<Integer> numbers = Flux.concat(numberService1(), numberService2());
         numberService1();
         numberService2();
 
