@@ -181,7 +181,10 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
         //todo: feel free to change code as you need
         Flux<Message> myMail = mailBoxPrimary().switchOnFirst(
                 (first, flux) -> {
-                    if (first.)
+                    if (first.get().metaData.contains("spam"))
+                        return mailBoxSecondary();
+                    else
+                        return mailBoxPrimary();
                 }
         );
         mailBoxPrimary();
