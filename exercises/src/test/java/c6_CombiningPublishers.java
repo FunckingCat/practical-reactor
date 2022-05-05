@@ -121,7 +121,7 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     @Test
     public void task_executor_again() {
         //todo: feel free to change code as you need
-        Flux<Void> tasks = null;
+        Flux<Void> tasks = taskExecutor().concatMap(i -> i);
         taskExecutor();
 
         //don't change below this line
@@ -139,7 +139,10 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     @Test
     public void need_for_speed() {
         //todo: feel free to change code as you need
-        Flux<String> stonks = null;
+        Flux<String> stonks = Flux.concat(
+                getStocksGrpc(),
+                getStocksRest()
+        ).take(5);
         getStocksGrpc();
         getStocksRest();
 
