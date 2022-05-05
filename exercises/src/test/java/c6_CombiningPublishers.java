@@ -7,6 +7,7 @@ import reactor.test.StepVerifier;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 /**
  * In this important chapter we are going to cover different ways of combining publishers.
@@ -57,9 +58,7 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     public void task_executor() {
         //todo: feel free to change code as you need
         Flux<Void> tasks =
-        taskExecutor().flatMap( i -> {
-
-        });
+        taskExecutor().flatMap(i -> i);
 
         //don't change below this line
         StepVerifier.create(tasks)
@@ -77,8 +76,8 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     @Test
     public void streaming_service() {
         //todo: feel free to change code as you need
-        Flux<Message> messageFlux = null;
-        streamingService();
+        Flux<Message> messageFlux =
+        streamingService().flatMap(i -> i);
 
         //don't change below this line
         StepVerifier.create(messageFlux)
