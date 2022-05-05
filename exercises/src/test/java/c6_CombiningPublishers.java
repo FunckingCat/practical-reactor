@@ -179,7 +179,11 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     @Test
     public void mail_box_switcher() {
         //todo: feel free to change code as you need
-        Flux<Message> myMail = mailBoxPrimary();
+        Flux<Message> myMail = mailBoxPrimary().switchOnFirst(
+                (first, flux) -> {
+                    if (first.)
+                }
+        );
         mailBoxPrimary();
         mailBoxSecondary();
 
