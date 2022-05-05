@@ -27,7 +27,7 @@ public class c3_FilteringSequence extends FilteringSequenceBase {
     @Test
     public void girls_are_made_of_sugar_and_spice() {
         Flux<String> shortListed = popular_girl_names_service()
-                //todo: change this line only
+                .filter(i -> i.length() < 5)
                 ;
 
         StepVerifier.create(shortListed)
@@ -42,7 +42,7 @@ public class c3_FilteringSequence extends FilteringSequenceBase {
     @Test
     public void needle_in_a_haystack() {
         Flux<Object> strings = mashed_data_service()
-                //todo: change this line only
+                .ofType(String.class)
                 ;
 
         StepVerifier.create(strings)
