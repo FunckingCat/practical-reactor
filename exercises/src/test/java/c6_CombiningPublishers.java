@@ -211,7 +211,7 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
         //todo: feel free to change code as you need
         autoComplete(null);
         Flux<String> suggestions = userSearchInput()
-                //todo: use one operator only
+                .switchMap(i -> autoComplete(i))
                 ;
 
         //don't change below this line
@@ -230,7 +230,9 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     public void prettify() {
         //todo: feel free to change code as you need
         //todo: use when,and,then...
-        Mono<Boolean> successful = null;
+        Mono<Boolean> successful = Mono.just(openFile())
+            .then(writeToFile("0x3522285912341"))
+                .then(closeFile()) ;
 
         openFile();
         writeToFile("0x3522285912341");
