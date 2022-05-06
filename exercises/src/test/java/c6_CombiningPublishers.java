@@ -230,9 +230,9 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     public void prettify() {
         //todo: feel free to change code as you need
         //todo: use when,and,then...
-        Mono<Boolean> successful = Mono.just(openFile())
+        Mono<Boolean> successful = Mono.when(openFile())
             .then(writeToFile("0x3522285912341"))
-                .then(closeFile()) ;
+                .then(closeFile()).thenReturn(true) ;
 
         openFile();
         writeToFile("0x3522285912341");
@@ -254,7 +254,8 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     @Test
     public void one_to_n() {
         //todo: feel free to change code as you need
-        Flux<String> fileLines = null;
+        Flux<String> fileLines =
+                Mono.when(openFile()).thenMany(readFile());
         openFile();
         readFile();
 
@@ -270,9 +271,11 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     @Test
     public void acid_durability() {
         //todo: feel free to change code as you need
-        Flux<String> committedTasksIds = null;
-        tasksToExecute();
-        commitTask(null);
+        Flux<String> committedTasksIds = tasksToExecute()
+                .concatMap(task ->
+                        task.flatMap(taskId -> commitTask(taskId)
+                                .thenReturn(taskId))
+                );
 
         //don't change below this line
         StepVerifier.create(committedTasksIds)
@@ -290,7 +293,7 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     @Test
     public void major_merger() {
         //todo: feel free to change code as you need
-        Flux<String> microsoftBlizzardCorp =
+        Flux<String> microsoftBlizzardCorp = microsoftTitles().mergeWith(blizzardTitles());
                 microsoftTitles();
         blizzardTitles();
 
@@ -316,7 +319,7 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
     @Test
     public void car_factory() {
         //todo: feel free to change code as you need
-        Flux<Car> producedCars = null;
+        Flux<Car> producedCars = carChassisProducer().zipWith(carEngineProducer(), Car::new);
         carChassisProducer();
         carEngineProducer();
 
@@ -339,9 +342,15 @@ public class c6_CombiningPublishers extends CombiningPublishersBase {
 
     //todo: implement this method based on instructions
     public Mono<String> chooseSource() {
-        sourceA(); //<- choose if sourceRef == "A"
-        sourceB(); //<- choose if sourceRef == "B"
-        return Mono.empty(); //otherwise, return empty
+        return Mono.defer(() -> {
+            if (sourceRef.get() == "A") {
+                return sourceA();
+            }
+            if (sourceRef.get() == "B") {
+                return sourceB();
+            }
+            return Mono.empty();
+        });
     }
 
     @Test
